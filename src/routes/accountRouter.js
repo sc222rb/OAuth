@@ -24,3 +24,6 @@ router.get(
   (req, res, next) => handleOAuthCallback(req, res, next),
   (req, res, next) => fetchGitLabUserData(req, res, next),
   (req, res, next) => controller.redirect(req, res, next))
+
+// Log out
+router.get('/logout', (req, res) => controller.logout(req, res))

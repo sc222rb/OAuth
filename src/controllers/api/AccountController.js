@@ -29,4 +29,29 @@ export class AccountController {
       next(createError(500, err.message))
     }
   }
+
+  /**
+   * Logs out the user by destroying the session and browser cookie.
+   * Redirects to the index page.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @param {Function} next - Express next middleware function.
+   */
+  async logout (req, res, next) {
+    try {
+      // Clear the session
+      req.session.destroy((error) => {
+        if (error) {
+          console.error('Error destroying session:', error.message || error)
+          next(createError(500, error.message || 'Internal Server Error'))
+        }
+        res.clearCookie(process.env.SESSION_NAME)
+        return res.redirect('../')
+      })
+    } catch (error) {
+      console.error('Error during logout:', error.message || error)
+      next(createError(500, error.message || 'Internal Server Error'))
+    }
+  }
 }
