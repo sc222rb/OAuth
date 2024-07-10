@@ -21,7 +21,10 @@ export class AccountController {
    */
   async redirect (req, res, next) {
     try {
-      console.log('in redirect')
+      const viewData = {
+        user: req.session.user
+      }
+      return res.render('home/index', { viewData })
     } catch (err) {
       next(createError(500, err.message))
     }
