@@ -1,0 +1,76 @@
+<h1>Groups with Projects</h1>
+<div>
+  <% if (viewData.groups.length) { %>
+    <% viewData.groups.forEach(group => { %>
+      <div class="card">
+      <h2><a href="<%= group.webUrl %>"><%= group.name %></a></h2>
+      <% if (group.avatarUrl) { %>
+        <img src="<%= group.avatarUrl %>" alt="<%= group.name %>'s Avatar" class="avatar">
+      <% } %>
+      <p><%= group.fullPath %></p>
+      <% if (group.projects.length) { %>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Project</th>
+              <th>Last commit</th>
+              <th>Author Avatar</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% group.projects.forEach(project => { %>
+              <tr>
+                <td><a href="<%= project.webUrl %>"><%= project.name %></a></td>
+                <td>
+                  <% if (project.lastCommit) { %>
+                    <%= project.lastCommit.committedDate %>
+                  <% } else { %>
+                    No commits
+                  <% } %>
+                </td>
+                <td>
+                  <% if (project.lastCommit) { %>
+                    <%= project.lastCommit.author.name %>
+                  <% } else { %>
+                    N/A
+                  <% } %>
+                </td>
+                <td>
+                  <% if (project.lastCommit) { %>
+                    <%= project.lastCommit.author.username %>
+                  <% } else { %>
+                    N/A
+                  <% } %>
+                </td>
+                <td>
+                  <% if (project.lastCommit && project.lastCommit.author.avatarUrl) { %>
+                    <img src="<%= project.lastCommit.author.avatarUrl %>" alt="<%= project.lastCommit.author.name %>'s Avatar" class="avatar">
+                  <% } else { %>
+                    No avatar
+                  <% } %>
+                </td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+        <% if (group.projectsPageInfo.hasNextPage) { %>
+          <div>
+            <a href="<%= group.webUrl %>">Load more projects</a>
+          </div>
+        <% } %>
+      <% } else { %>
+        <p>There are no projects to display.</p>
+      <% } %>
+      </div>
+    <% }); %>
+    <% if (viewData.pageInfo.hasNextPage) { %>
+      <div>
+        <a href="#">Load more groups</a>
+      </div>
+    <% } %>
+  <% } else { %>
+    <div class="alert alert-danger" role="alert">
+      There are no groups to display.
+    </div>
+  <% } %>
+</div>
