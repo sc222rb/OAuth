@@ -7,10 +7,12 @@
 
 import express from 'express'
 import expressLayouts from 'express-ejs-layouts'
+import session from 'express-session'
 import helmet from 'helmet'
 import logger from 'morgan'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { sessionOptions } from './config/sessionOptions.js'
 import { router } from './routes/router.js'
 
 try {
@@ -62,6 +64,7 @@ try {
   if (process.env.NODE_ENV === 'production') {
     app.set('trust proxy', 1) // trust first proxy
   }
+  app.use(session(sessionOptions))
 
   // Parse requests of the content type application/json.
   app.use(express.json())
