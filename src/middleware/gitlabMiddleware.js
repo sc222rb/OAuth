@@ -1,9 +1,8 @@
 /**
- * Authenticates a user.
+ * Gitlab middleware.
  *
- * @param {object} req - Express request object.
- * @param {object} res - Express response object.
- * @param {Function} next - Express next middleware function.
+ * @author Sayaka Chishiki Jakobsson
+ * @version 1.0.0
  */
 
 import axios from 'axios'
