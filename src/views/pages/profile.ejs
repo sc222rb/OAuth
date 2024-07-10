@@ -1,0 +1,18 @@
+<h1>Profile</h1>
+<div>
+  <% if (viewData.user) { %>
+    <div class="card profile-card text-left">
+        <h4>GitLab ID</h4>
+        <p><%= viewData.user.id %></p>
+        <h4>Email</h4>
+        <p><%= viewData.user.email %></p>
+        <h4>Name</h4>
+        <p><%= viewData.user.name %></p>
+        <h4>Gitlab username</h4>
+        <p><%= viewData.user.username %></p>
+        <img src="<%= viewData.user.avatar %>" alt="" />
+        <h4>Last activity</h4>
+        <p><%= viewData.user.lao %></p>
+    </div>
+  <% } %>
+</div>
