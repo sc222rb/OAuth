@@ -8,13 +8,14 @@ import express from 'express'
 import { router as homeRouter } from './homeRouter.js'
 import { router as accountRouter } from './accountRouter.js'
 import { router as userRouter } from './userRouter.js'
+import { checkAuthentication } from '../middleware/checkAuthentication.js'
 import createError from 'http-errors'
 
 export const router = express.Router()
 
 router.use('/', homeRouter)
 router.use('/auth', accountRouter)
-router.use('/user', userRouter)
+router.use('/user', checkAuthentication, userRouter)
 
 // Catch 404 (ALWAYS keep this as the last route).
 router.use('*', (req, res, next) => {
