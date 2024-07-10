@@ -84,36 +84,42 @@ try {
   app.use((err, req, res, next) => {
     console.error(err)
 
-    // 403 Forbidden.
-    if (err.status === 403) {
-      return res
-        .status(403)
-        .sendFile(join(directoryFullName, 'views', 'errors', '403.html'))
+    /**
+     * Sends the specified error page with the given status code.
+     *
+     * @param {number} statusCode The HTTP status code to send.
+     * @param {string} errorPage The filename of the error page to send.
+     * @returns {void}
+     */
+    const sendErrorPage = (statusCode, errorPage) => {
+      return res.status(statusCode).sendFile(join(directoryFullName, 'views', 'errors', errorPage))
     }
 
-    // 404 Not Found.
-    if (err.status === 404) {
-      return res
-        .status(404)
-        .sendFile(join(directoryFullName, 'views', 'errors', '404.html'))
+    // Handle specific error statuses
+    switch (err.status) {
+      case 400:
+        return sendErrorPage(400, '400.html')
+      case 401:
+        return sendErrorPage(401, '401.html')
+      case 403:
+        return sendErrorPage(403, '403.html')
+      case 404:
+        return sendErrorPage(404, '404.html')
+      default:
+        // 500 Internal Server Error (in production, all other errors send this response).
+        if (process.env.NODE_ENV === 'production') {
+          return sendErrorPage(500, '500.html')
+        }
+
+        // ---------------------------------------------------
+        // ⚠️ WARNING: Development Environment Only!
+        // Detailed error information is provided.
+        // ---------------------------------------------------
+
+        // Render a generic error page for other errors in development
+        res.status(err.status || 500).render('errors/error', { error: err })
+        break
     }
-
-    // 500 Internal Server Error (in production, all other errors send this response).
-    if (process.env.NODE_ENV === 'production') {
-      return res
-        .status(500)
-        .sendFile(join(directoryFullName, 'views', 'errors', '500.html'))
-    }
-
-    // ---------------------------------------------------
-    // ⚠️ WARNING: Development Environment Only!
-    //             Detailed error information is provided.
-    // ---------------------------------------------------
-
-    // Render the error page.
-    res
-      .status(err.status || 500)
-      .render('errors/error', { error: err })
   })
 
   // Starts the HTTP server listening for connections.
