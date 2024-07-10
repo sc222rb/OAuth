@@ -15,3 +15,6 @@ const controller = new UserController()
 
 // show profile page
 router.get('/profile', (req, res, next) => controller.showProfile(req, res, next))
+
+// show activities page
+router.get('/activities', (req, res, next) => controller.showActivities(req, res, next))
