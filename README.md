@@ -1,19 +1,36 @@
-# Assignment WT1 - OAuth + Consuming REST and GraphQL APIs
+# OAuth2 Access Delegation System for GitLab + Consuming REST and GraphQL APIs
 
-In modern web applications, the ability to delegate access between systems is crucial. One widely used standard for access delegation is OAuth (Open Authorization). Although the OAuth flow may appear complex at first glance, it is important to understand the roles and communication of the different stakeholders (client/consumer/service provider) involved.
+This project is a server-side rendered web application that implements a three-legged OAuth2 flow, enabling users to log in with their GitLab accounts and access various pieces of information from their GitLab profiles. This application　showcases a custom implementation of OAuth2 without relying on external libraries for OAuth support.
 
-## The assignment
+## Features
 
-Your task is to develop a three-legged OAuth2 access delegation system for a server-side rendered web application (the consumer) and GitLab (the service provider). The system should enable users to log in to the consumer application using their gitlab.lnu.se account (#10) and access the following information from GitLab: basic profile information (#11), the 101 most recent GitLab activities (#12), and information about groups, projects and the latest commit.
+OAuth2 Authentication: Users can securely log in to the application using their GitLab accounts hosted at gitlab.lnu.se.  
 
-In particular, the system should allow users to view details about the first three projects in each of their first five groups, including information about the latest commit, provided that they have access to those groups (#13).
+User Profile Information: After logging in, users can view their basic GitLab profile information.  
 
-Note that you must not use any external packages or modules that have built-in OAuth support (#2).
+Recent GitLab Activities: The application fetches and displays the 101 most recent activities from the user's GitLab account.  
 
-If you're aiming for a higher grade, it's important you choose a design and structure for your code that makes it easier to develop, test, and maintain over time. (#14)
+Group and Project Details: Users can view details about the first three projects within each of their first five GitLab groups, including information on the latest commits.
 
-## Requirements
+## Technical Overview
+This project is built using a server-side rendering approach with no external OAuth libraries, providing a deep dive into the OAuth2 flow and RESTful/GraphQL API consumption.  
 
-Please review [all requirements of the application](../../issues/) including (#1, #2, #3, #4, #5, #6, #7, #8, #9, #10, #11, #12, #13, and #14). Pay special attention to the labels indicating if a requirement is required or optional.
+Key Components:  
+OAuth2 Flow Implementation: Handles the OAuth2 process, including obtaining authorization codes and exchanging them for access tokens.  
 
-As you implement tasks and add functionality, it is important to create and close issues accordingly.
+REST API Integration: Retrieves the user's profile information and recent activities using GitLab's REST API.  
+
+GraphQL API Integration: Fetches detailed information about groups, projects, and commits using GitLab's GraphQL API.
+
+Design Considerations:  
+
+Custom OAuth Implementation: The OAuth2 flow is implemented manually, without relying on pre-built OAuth packages, providing a better understanding of the process.  
+
+Code Structure: The code is structured to be modular, making it easier to extend and maintain.  
+
+Security: OAuth2 best practices are followed to ensure secure handling of tokens and user data.
+
+## Deployment
+
+The application can be accessed at the following link:
+[OAuth](https://cscloud8-80.lnu.se/oauth/) 
