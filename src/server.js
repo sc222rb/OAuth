@@ -14,6 +14,7 @@ import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { sessionOptions } from './config/sessionOptions.js'
 import { router } from './routes/router.js'
+import 'dotenv/config'
 
 try {
   const app = express()
@@ -84,42 +85,46 @@ try {
   app.use((err, req, res, next) => {
     console.error(err)
 
-    /**
-     * Sends the specified error page with the given status code.
-     *
-     * @param {number} statusCode The HTTP status code to send.
-     * @param {string} errorPage The filename of the error page to send.
-     * @returns {void}
-     */
-    const sendErrorPage = (statusCode, errorPage) => {
-      return res.status(statusCode).sendFile(join(directoryFullName, 'views', 'errors', errorPage))
+    // Set default status code
+    const statusCode = err.status || 500
+
+    // Prepare error object for view
+    const errorObject = {
+      status: statusCode,
+      message: err.message || 'Internal Server Error',
+      stack: process.env.NODE_ENV === 'production' ? undefined : err.stack
     }
 
-    // Handle specific error statuses
-    switch (err.status) {
-      case 400:
-        return sendErrorPage(400, '400.html')
-      case 401:
-        return sendErrorPage(401, '401.html')
-      case 403:
-        return sendErrorPage(403, '403.html')
-      case 404:
-        return sendErrorPage(404, '404.html')
-      default:
-        // 500 Internal Server Error (in production, all other errors send this response).
-        if (process.env.NODE_ENV === 'production') {
-          return sendErrorPage(500, '500.html')
-        }
-
-        // ---------------------------------------------------
-        // ⚠️ WARNING: Development Environment Only!
-        // Detailed error information is provided.
-        // ---------------------------------------------------
-
-        // Render a generic error page for other errors in development
-        res.status(err.status || 500).render('errors/error', { error: err })
-        break
+    // In production, don't expose stack traces
+    if (process.env.NODE_ENV === 'production') {
+      // Generic error messages for production
+      switch (statusCode) {
+        case 400:
+          errorObject.message = 'Bad Request'
+          break
+        case 401:
+          errorObject.message = 'Unauthorized'
+          break
+        case 403:
+          errorObject.message = 'Forbidden'
+          break
+        case 404:
+          errorObject.message = 'Not Found'
+          break
+        case 500:
+        default:
+          errorObject.message = 'Internal Server Error'
+          break
+      }
     }
+
+    // Prepare viewData for the layout (header needs it)
+    const viewData = {
+      user: req.session?.user || null
+    }
+
+    // Render the error page with both error and viewData
+    res.status(statusCode).render('errors/error', { error: errorObject, viewData })
   })
 
   // Starts the HTTP server listening for connections.
