@@ -14,7 +14,6 @@ import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { sessionOptions } from './config/sessionOptions.js'
 import { router } from './routes/router.js'
-import 'dotenv/config'
 
 try {
   const app = express()
