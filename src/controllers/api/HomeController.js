@@ -11,8 +11,7 @@ import createError from 'http-errors'
  */
 export class HomeController {
   /**
-   * Renders a view and sends the rendered HTML string as an HTTP response.
-   * index GET.
+   * Renders a view and sends the rendered HTML string as a HTTP response.
    *
    * @param {object} req - Express request object.
    * @param {object} res - Express response object.
